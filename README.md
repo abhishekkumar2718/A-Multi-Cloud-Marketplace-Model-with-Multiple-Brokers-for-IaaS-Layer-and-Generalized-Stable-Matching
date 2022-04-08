@@ -1,6 +1,6 @@
 # A Multi Cloud Marketplace Model with Multiple Brokers for IaaS Layer and Generalized Stable Matching
 
-A visualisation of the paper by the same name. Made for CS466 Cloud Computing Course Project.
+A visualisation of the [paper by the same name](https://ieeexplore.ieee.org/document/8603172). Made for CS466 Cloud Computing Course Project.
 
 > The application is also accessible as a 
 > [website](https://abhishekkumar2718.github.io/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/)
