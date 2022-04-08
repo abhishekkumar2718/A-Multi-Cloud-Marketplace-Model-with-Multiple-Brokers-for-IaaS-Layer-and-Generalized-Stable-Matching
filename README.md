@@ -1,11 +1,11 @@
-# A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching
+# A Multi Cloud Marketplace Model with Multiple Brokers for IaaS Layer and Generalized Stable Matching
 
-A visualisation of the paper by the same name. Made for CS466 Cloud Computing Course Project.
+A visualisation of the [paper by the same name](https://ieeexplore.ieee.org/document/8603172). Made for CS466 Cloud Computing Course Project.
 
 > The application is also accessible as a 
-> [website](abhishekkumar2718.github.io/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/)
+> [website](https://abhishekkumar2718.github.io/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/)
 > and the source code is available on my [Github
-> repository](github.com/abhishekkumar2718/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/).
+> repository](https://github.com/abhishekkumar2718/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/).
 
 ## Installation
 
@@ -41,12 +41,12 @@ jekyll serve
 
 ## Screenshots
 
-![Model Parameters](/screenshots/Model Parameters.png)
+![Model Parameters](/screenshots/model_parameters.png)
 
-![Centralized Algorithm - Results](/screenshots/Centralized Algorithm - Results.png)
+![Centralized Algorithm - Results](/screenshots/centralized_algorithm_results.png)
 
-![Centralized Algorithm - Steps](/screenshots/Centralized Algorithm - Steps.png)
+![Centralized Algorithm - Steps](/screenshots/centralized_algorithm_steps.png)
 
-![Distributed Algorithm - Results](/screenshots/Distributed Algorithm - Results.png)
+![Distributed Algorithm - Results](/screenshots/distributed_algorithm_results.png)
 
-![Distributed Algorithm - Steps](/screenshots/Distributed Algorithm - Steps.png)
+![Distributed Algorithm - Steps](/screenshots/distributed_algorithm_steps.png)
