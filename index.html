@@ -6,6 +6,9 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>A Multi Cloud Marketplace Model with Multiple Brokers for IaaS Layer and Generalized Stable Matching</title>
+
+    <script src="https://kit.fontawesome.com/440f3d88dc.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   </head>
 
   <body>
@@ -19,19 +22,609 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Background</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/vm_allocation_algorithms.html">VM Allocation Algorithms</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/experimental_results.html">Experimental Results</a>
+              <a class="nav-link active" href="/A-Multi-Cloud-Marketplace-Model-with-Multiple-Brokers-for-IaaS-Layer-and-Generalized-Stable-Matching/">VM Allocation Algorithms</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
 
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Model Parameters</h5>
+
+          <form id="model-parameters-form">
+            <div class="form-group row">
+              <label for="number-of-brokers" class="col-sm-4 col-form-label">
+                Number of Brokers, <i>N</i>
+              </label>
+
+              <div class="col-sm-8">
+                <input type="number" id="number-of-brokers" name="number-of-brokers" class="form-control" placeholder="4" required="true">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for="number-of-providers" class="col-sm-4 col-form-label">
+                Number of Cloud Service Providers, <i>M</i>
+              </label>
+
+              <div class="col-sm-8">
+                <input type="number" id="number-of-providers" name="number-of-providers" class="form-control" placeholder="13" required="true">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for="price-matrix" class="col-form-label">
+                Price Matrix, <i>C</i>
+              </label>
+
+              <div id="price-matrix-form-parent">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for="rental-price" class="col-form-label">
+                Rental Price Vector, <i>p</i>
+              </label>
+
+              <div id="rental-price-form-parent">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for="supply" class="col-form-label">
+                Supply Vector, <i>s</i>
+              </label>
+
+              <div id="supply-form-parent">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for"cost" class="col-form-label">
+                Cost to Manufacture a VM, <i>α</i>
+              </label>
+              
+              <div id="cost-form-parent">
+              </div>
+            </div>
+
+            <div class="form-group row mt-1">
+              <label for="demand" class="col-form-label">
+                Demand Vector, <i>d</i>
+              </label>
+
+              <div id="demand-form-parent">
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary" id="allocation-step">
+                Allocate <i class="fa-solid fa-forward-step ml-1"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="algorithm-row" class="row row-cols-2 mt-4">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Centralized Algorithm</h5>
+
+              <ul class="nav nav-tabs" id="centralized-algorithm-tab" role="tablist">
+                <li class="nav-item active" role="presentation">
+                  <button class="nav-link active" id="centralized-algorithm-description-tab" data-bs-toggle="tab" data-bs-target="#centralized-algorithm-description-content" type="button" role="tab" aria-controls="Centralized Algorithm Description" aria-selected="true">
+                    Algorithm
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="centralized-algorithm-results-tab" data-bs-toggle="tab" data-bs-target="#centralized-algorithm-results-content" type="button" role="tab" aria-controls="Centralized Algorithm Results" aria-selected="false">
+                    Results
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="centralized-algorithm-steps-tab" data-bs-toggle="tab" data-bs-target="#centralized-algorithm-steps-content" type="button" role="tab" aria-controls="Centralized Algorithm Steps" aria-selected="false">
+                    Steps
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="centralized-algorithm-tab-content">
+                <div class="tab-pane fade show active" id="centralized-algorithm-description-content" role="tabpanel" aria-labelledby="centralized-algorithm-description-tab">
+                  <ol class="mt-2">
+                    <li>Sort provider-broker pairs \((C_i, B_j)\) in descending order of their \(p_j - \alpha_i\) value.</li>
+                    <li>For every pair, do the maximal possible trade - which is determined by their residual supply \(s_i\) and demand \(d_j\).</li>
+                    <li>Update the residual supply \(s_i\) and demand \(d_j\) by subtracting the number of VMs allocated.</li>
+                    <li>Repeat until all residual demands are zero or all provider-broker pairs are exhausted.</li>
+                  </ol>
+                </div>
+
+                <div class="tab-pane fade" id="centralized-algorithm-results-content" role="tabpanel" aria-labelledby="centralized-algorithm-results-tab">
+                  <p class="mt-2">
+                    <strong>Total Social Welfare = <span id="centralized-algorithm-total-social-welfare"></span></strong>
+                  </p>
+
+                  <p>
+                    <strong>Allocation Matrix, A</strong>
+
+                    <div id="centralized-algorithm-allocation-matrix"></div>
+                  </p>
+
+                  <p>
+                    <strong>Cloud Provider-wise Surplus, CS</strong>
+
+                    <div id="centralized-algorithm-provider-welfare"></div>
+                  </p>
+
+                  <p>
+                    <strong>Broker-wise Surplus, BS</strong>
+
+                    <div id="centralized-algorithm-broker-welfare"></div>
+                  </p>
+                </div>
+
+                <div class="tab-pane fade" id="centralized-algorithm-steps-content" role="tabpanel" aria-lablledby="centralized-algorithm-steps-tab">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Distributed Algorithm</h5>
+
+              <ul class="nav nav-tabs" id="distributed-algorithm-tab" role="tablist">
+                <li class="nav-item active" role="presentation">
+                  <button class="nav-link active" id="distributed-algorithm-description-tab" data-bs-toggle="tab" data-bs-target="#distributed-algorithm-description-content" type="button" role="tab" aria-controls="Distributed Algorithm Description" aria-selected="true">
+                    Algorithm
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="distributed-algorithm-results-tab" data-bs-toggle="tab" data-bs-target="#distributed-algorithm-results-content" type="button" role="tab" aria-controls="Distributed Algorithm Results" aria-selected="false">
+                    Results
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="distributed-algorithm-steps-tab" data-bs-toggle="tab" data-bs-target="#distributed-algorithm-steps-content" type="button" role="tab" aria-controls="Distributed Algorithm Steps" aria-selected="false">
+                    Steps
+                  </button>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="distributed-algorithm-tab-content">
+                <div class="tab-pane fade show active" id="distributed-algorithm-description-content" role="tabpanel" aria-labelledby="distributed-algorithm-description-tab">
+                  <p class="mt-2">
+                    As both broker and cloud provider look to maximize their surplus, they both define a preference list as follows:
+                    <ol>
+                      <li>A broker \(B_j\) orders cloud providers by the increasing \(c_{ij}\) values.</li>
+                      <li>A cloud provider \(C_j\) orders brokers by the decreasing value of \(c_{ij}\) values.</li>
+                    </ol>
+                  </p>
+
+                  <p>
+                    The algorithm is iterative in nature with each iteration consisting of a \(BPhase\) (broker phase) followed by a \(CPhase\) (cloud provider phase).
+                  </p>
+
+                  <p>
+                    <strong>\(BPhase\)</strong>: Each broker \(B_j\) makes a request for the supply of \(rd_j\) (residual demand) virtual machines to the cloud provider who is at head of his current preference list. A broker makes request to a cloud provider only once and hence discards the provider after the request.
+                  </p>
+
+                  <p>
+                    <strong>\(CPhase\)</strong>: Each cloud provider \(C_i\) evaluates the proposed bids and responds to them in a such a way that maximizes their surplus. If a cloud provider gets a better bid in a later iteration, they may revoke already allocated resources partially or fully from from one or more brokers.
+                  </p>
+
+                  <p>
+                    The algorithm terminates when no broker makes a new supply request during a \(BPhase\) - either if there is no residual demand or if they have exhausted all cloud providers.
+                  </p>
+                </div>
+
+                <div class="tab-pane fade" id="distributed-algorithm-results-content" role="tabpanel" aria-labelledby="distributed-algorithm-results-tab">
+                  <p class="mt-2">
+                    <strong>Total Social Welfare = <span id="distributed-algorithm-total-social-welfare"></span></strong>
+                  </p>
+
+                  <p>
+                    <strong>Allocation Matrix, A</strong>
+
+                    <div id="distributed-algorithm-allocation-matrix"></div>
+                  </p>
+
+                  <p>
+                    <strong>Cloud Provider-wise Surplus, CS</strong>
+
+                    <div id="distributed-algorithm-provider-welfare"></div>
+                  </p>
+
+                  <p>
+                    <strong>Broker-wise Surplus, BS</strong>
+
+                    <div id="distributed-algorithm-broker-welfare"></div>
+                  </p>
+                </div>
+
+                <div class="tab-pane fade" id="distributed-algorithm-steps-content" role="tabpanel" aria-lablledby="distributed-algorithm-steps-tab">
+                  <p class="mt-2"><strong>Broker Preferences</strong></p>
+
+                  <div id="distributed-algorithm-broker-preferences"></div>
+
+                  <p><strong>Cloud Provider Preferences</strong></p>
+
+                  <div id="distributed-algorithm-provider-preferences"></div>
+
+                  <div id="distributed-algorithm-steps-content-steps"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script>
+      function build_table(matrix, row_prefix, col_prefix) {
+        let html = `<table class="table"><thead><tr><th scope="col">#</th>`;
+
+        for (let i = 0; i < matrix[0].length; i++)
+          html += `<th scope="col">${col_prefix} ${i + 1}</th>`;
+
+        html += "</tr></thead><tbody>";
+
+        for (let i = 0; i < matrix.length; i++) {
+          html += "<tr>";
+
+          if (matrix.length == 1)
+            html += `<td>${row_prefix}</td>`;
+          else
+            html += `<td>${row_prefix} ${i + 1}</td>`;
+
+          for (let j = 0; j < matrix[i].length; j++)
+            html += `<td>${matrix[i][j]}</td>`;
+
+          html +=  "</tr>";
+        }
+
+        html += "</tbody></table>";
+
+        return html;
+      }
+
+      function build_form_table(rows, columns, row_prefix, col_prefix, variable_shorthand) {
+        html = `<table class="table"><thead><tr><th scope="col">#</th>`;
+
+        for (let i = 0; i < columns; i++) {
+          html += `<th scope="col">${col_prefix} ${i + 1}</th>`;
+        }
+        
+        html += "</tr></thead><tbody>";
+
+        for (let i = 0; i < rows; i++) {
+          html += "<tr>"
+
+          if (rows == 1)
+            html += `<td>${row_prefix}</td>`
+          else
+            html += `<td>${row_prefix} ${i + 1}</td>`
+
+          for (let j = 0; j < columns; j++) {
+            if (rows == 1)
+              html += `<td><input type="number" class="form-control" id="${variable_shorthand}_${i}_${j}" placeholder="${variable_shorthand}[${j + 1}]" required="true"></td>`;
+            else
+              html += `<td><input type="number" class="form-control" id="${variable_shorthand}_${i}_${j}" placeholder="${variable_shorthand}[${i + 1}][${j + 1}]" required="true"></td>`;
+          }
+          html += "</tr>";
+        }
+
+        html += "</tbody></table>";
+
+        return html;
+      };
+
+      function populate_price_matrix(N, M) {
+        $("#price-matrix-form-parent").html(build_form_table(M, N, 'Provider', 'Broker', 'C'));
+      };
+
+      function populate_rental_price_vector(N) {
+        $("#rental-price-form-parent").html(build_form_table(1, N, 'Rental Price', 'Broker', 'p'));
+      };
+
+      function populate_supply_vector(M) {
+        $("#supply-form-parent").html(build_form_table(1, M, 'Supply', 'Provider', 's'));
+      };
+
+      function populate_demand_vector(N) {
+        $("#demand-form-parent").html(build_form_table(1, N, 'Demand', 'Broker', 'd'));
+      };
+
+      function populate_cost_vector(M) {
+        $("#cost-form-parent").html(build_form_table(1, M, 'Cost', 'Provider', 'α'));
+      };
+
+      $("#number-of-brokers, #number-of-providers").change(function() {
+        let N = parseInt($("#number-of-brokers").val());
+        let M = parseInt($("#number-of-providers").val());
+
+
+        if (isNaN(N) || isNaN(M))
+          return;
+
+        populate_cost_vector(M);
+        populate_supply_vector(M);
+        populate_demand_vector(N);
+        populate_rental_price_vector(N);
+
+        populate_price_matrix(N, M);
+      });
+
+      function compute_centralized_algorithm(M, N, C, p, s, alpha, d) {
+        let steps = [];
+
+        let residual_supply = s;
+        let residual_demand = d;
+
+        let provider_welfare = new Array(M).fill(0);
+        let broker_welfare = new Array(N).fill(0);
+
+        let allocation_matrix = [];
+        for (let i = 0; i < M; i++)
+           allocation_matrix.push(new Array(N).fill(0));
+
+        let pairs = [];
+        for (let i = 0; i < M; i++) {
+           for (let j = 0; j < N; j++) {
+              pairs.push([i, j]);
+           }
+        }
+
+        pairs.sort(function(lhs, rhs) { return (p[lhs[1]] - alpha[lhs[0]]) < (p[rhs[1]] - alpha[rhs[0]]); })
+
+        for (let i = 0; i < M * N; i++) {
+           let provider = pairs[i][0], broker = pairs[i][1];
+           let vms_allocated = Math.min(residual_supply[provider], residual_demand[broker]);
+
+           residual_demand[broker] -= vms_allocated;
+           residual_supply[provider] -= vms_allocated;
+           allocation_matrix[provider][broker] = vms_allocated;
+
+           steps.push([provider, broker, vms_allocated])
+        }
+
+        for (let i = 0; i < M; i++) {
+           for (let j = 0; j < N; j++)
+              provider_welfare[i] = provider_welfare[i] + (C[i][j] - alpha[i]) * allocation_matrix[i][j];
+        }
+
+        for (let j = 0; j < N; j++) {
+           for (let i = 0; i < M; i++)
+              broker_welfare[j] = broker_welfare[j] + (p[j] - C[i][j]) * allocation_matrix[i][j]; 
+        }
+
+        let total_social_welfare = broker_welfare.reduce((partial_sum, a) => partial_sum + a, 0) + provider_welfare.reduce((partial_sum, a) => partial_sum + a, 0);
+
+        return { total_social_welfare, allocation_matrix, provider_welfare, broker_welfare, steps };
+      };
+
+      function build_centralized_algorithm_steps(steps) {
+        let html = `<ol class="mt-2">`;
+
+        for (let i = 0; i < steps.length; i++) {
+          if (steps[i][2] == 0)
+            continue;
+
+          html += `<li>Cloud Provider \\(C_${steps[i][0]}\\) allocates \\(${steps[i][2]}\\) VMs to Broker \\(B_${steps[i][1]}\\).</li>`
+        }
+
+        html += `</ol>`;
+
+        return html;
+      }
+
+      function display_centralized_algorithm(results) {
+        $("#centralized-algorithm-total-social-welfare").html(results.total_social_welfare);
+        $("#centralized-algorithm-allocation-matrix").html(build_table(results.allocation_matrix, 'Cloud Provider', 'Broker'));
+        $("#centralized-algorithm-provider-welfare").html(build_table([results.provider_welfare], 'Surplus', 'Cloud Provider'));
+        $("#centralized-algorithm-broker-welfare").html(build_table([results.broker_welfare], 'Surplus', 'Broker'));
+        $("#centralized-algorithm-steps-content").html(build_centralized_algorithm_steps(results.steps));
+        
+        let results_tab = new bootstrap.Tab(document.querySelector("#centralized-algorithm-results-tab"));
+        results_tab.show();
+
+        MathJax.Hub.Typeset("centralized-algorithm-steps-content");
+      }
+
+      function compute_distributed_algorithm(M, N, C, p, s, alpha, d) {
+        let residual_supply = s;
+        let residual_demand = d;
+
+        let provider_welfare = new Array(M).fill(0);
+        let broker_welfare = new Array(N).fill(0);
+
+        let allocation_matrix = [];
+        for (let i = 0; i < M; i++)
+           allocation_matrix.push(new Array(N).fill(0));
+
+        let broker_preferences = [];
+        for (let j = 0; j < N; j++) {
+          let preferences = [];
+          for (let i = 0; i < M; i++)
+            preferences.push(i);
+
+          preferences.sort(function(lhs, rhs) { return C[lhs][j] < C[rhs][j]; });
+          broker_preferences.push(preferences);
+        }
+
+        let provider_preferences = [];
+        for (let i = 0; i < M; i++) {
+          let preferences = [];
+          for (let j = 0; j < N; j++)
+             preferences.push(j);
+
+          preferences.sort(function(lhs, rhs) { return C[i][rhs] < C[i][lhs]; });
+          provider_preferences.push(preferences);
+        }
+
+        let iterations = [];
+        for (let l = 0; l < N * M; l++) {
+          // Broker Phase
+          let requests = [];
+          for (let j = 0; j < N; j++) {
+             if (residual_demand[j])
+               requests.push({broker: j, provider: broker_preferences[j][l], demand: residual_demand[j]});
+          }
+
+
+          if (requests.length == 0)
+            break;
+
+          // Cloud Provider Phase
+          let accepted_requests = [];
+          for (let i = 0; i < M; i++) {
+            if (!residual_supply[i])
+              continue;
+
+            let best_request = undefined;
+            for (let k = 0; k < requests.length; k++) {
+              if (requests[k].provider != i)
+                continue;
+
+              let request = requests[k];
+              if (best_request == undefined)
+                best_request = request;
+              else {
+                for (let m = 0; m < N; m++) {
+                  if (provider_preferences[i][m] == best_request.broker)
+                    break;
+
+                  if (provider_preferences[i][m] == request.broker) {
+                    best_request = request;
+                    break;
+                  }
+                }
+              }
+            }
+
+            if (best_request == undefined)
+              continue;
+
+            let j = best_request.broker;
+            let vms_allocated = Math.min(residual_supply[i], best_request.demand);
+
+            allocation_matrix[i][j] = vms_allocated;
+            residual_supply[i] -= vms_allocated;
+            residual_demand[j] -= vms_allocated;
+
+            accepted_requests.push({broker: i, provider: j, vms_allocated: vms_allocated});
+          }
+
+          iterations.push({requests, accepted_requests})
+        }
+
+        for (let i = 0; i < M; i++) {
+           for (let j = 0; j < N; j++)
+              provider_welfare[i] = provider_welfare[i] + (C[i][j] - alpha[i]) * allocation_matrix[i][j];
+        }
+
+        for (let j = 0; j < N; j++) {
+           for (let i = 0; i < M; i++)
+              broker_welfare[j] = broker_welfare[j] + (p[j] - C[i][j]) * allocation_matrix[i][j]; 
+        }
+
+        let total_social_welfare = broker_welfare.reduce((partial_sum, a) => partial_sum + a, 0) + provider_welfare.reduce((partial_sum, a) => partial_sum + a, 0);
+
+        // Increment broker, provider preferences for display
+        for (let i = 0; i < N; i++) {
+          for (let j = 0; j < M; j++)
+             broker_preferences[i][j] += 1;
+        }
+
+        for (let i = 0; i < M; i++) {
+          for (let j = 0; j < N; j++)
+             provider_preferences[i][j] += 1;
+        }
+
+        return { total_social_welfare, allocation_matrix, provider_welfare, broker_welfare, steps: { broker_preferences, provider_preferences, iterations } };
+      }
+
+      function build_distributed_algorithm_steps(iterations) {
+        let html = "";
+        for (let k = 0; k < iterations.length; k++) {
+                        html += `<div><p><strong>Iteration ${k + 1}</strong></p><p>Broker Phase</p><ol>`;
+
+          for (let p = 0; p < iterations[k].requests.length; p++) {
+            let request = iterations[k].requests[p];
+
+            html += `<li>Broker \\(${request.broker + 1}\\) requests \\(${request.demand}\\) VMs from Cloud Provider \\(${request.provider + 1}\\).</li>`;
+          }
+          html += "</ol><p>Cloud Provider Phase</p><ol>";
+          for (let p = 0; p < iterations[k].accepted_requests.length; p++) {
+            let request = iterations[k].accepted_requests[p];
+            html += `<li>Cloud Provider \\(${request.provider + 1}\\) allocates \\(${request.vms_allocated}\\) VMs to Broker \\(${request.provider + 1}\\).</li>`;
+          }
+          html += "</ol></div>"
+        }
+
+        return html;
+      }
+
+      function display_distributed_algorithm(results) {
+        $("#distributed-algorithm-total-social-welfare").html(results.total_social_welfare);
+        $("#distributed-algorithm-allocation-matrix").html(build_table(results.allocation_matrix, 'Cloud Provider', 'Broker'));
+        $("#distributed-algorithm-provider-welfare").html(build_table([results.provider_welfare], 'Surplus', 'Cloud Provider'));
+        $("#distributed-algorithm-broker-welfare").html(build_table([results.broker_welfare], 'Surplus', 'Broker'));
+        $("#distributed-algorithm-broker-preferences").html(build_table(results.steps.broker_preferences, 'Broker', 'Preference'));
+        $("#distributed-algorithm-provider-preferences").html(build_table(results.steps.provider_preferences, 'Cloud Provider', 'Preference'));
+        $("#distributed-algorithm-steps-content-steps").html(build_distributed_algorithm_steps(results.steps.iterations));
+
+        MathJax.Hub.Typeset("distributed-algorithm-steps-content");
+      }
+
+      function read_integer(selector) {
+        return parseInt($(selector).val());
+      }
+
+      function read_matrix(variable_shorthand, rows, columns) {
+        let matrix = [];
+        for (let i = 0; i < rows; i++)
+          matrix.push(new Array(columns).fill(0));
+
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < columns; j++) {
+            matrix[i][j] = read_integer("#" + variable_shorthand + "_" + i + "_" + j);
+          }
+        }
+
+        return matrix;
+      }
+
+      $("#model-parameters-form").submit(function(event) {
+        event.preventDefault();
+
+        let N = read_integer("#number-of-brokers");
+        let M = read_integer("#number-of-providers");
+        let C = read_matrix('C', M, N);
+        let p = read_matrix('p', 1, N)[0];
+        let s = read_matrix('s', 1, M)[0];
+        let alpha = read_matrix('α', 1, M)[0];
+        let d = read_matrix('d', 1, N)[0];
+
+        let centralized_results = compute_centralized_algorithm(M, N, C, p, s, alpha, d);
+        let distributed_results = compute_distributed_algorithm(M, N, C, p, s, alpha, d);
+
+        display_centralized_algorithm(centralized_results);
+        display_distributed_algorithm(distributed_results);
+      });
+    </script>
   </body>
 </html>
